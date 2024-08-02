@@ -1,4 +1,3 @@
-
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react"
 import { InputSelect } from "./components/InputSelect"
 import { Instructions } from "./components/Instructions"
@@ -11,8 +10,17 @@ import { Employee } from "./utils/types"
 
 export function App() {
   const { data: employees, loading: loadingEmployees, fetchAll: fetchAllEmployees } = useEmployees()
-  const { data: paginatedTransactions, loading: loadingTransactions, fetchAll: fetchAllPaginatedTransactions, invalidateData: invalidatePaginatedTransactions } = usePaginatedTransactions()
-  const { data: transactionsByEmployee, fetchById: fetchTransactionsByEmployee, invalidateData: invalidateTransactionsByEmployee } = useTransactionsByEmployee()
+  const {
+    data: paginatedTransactions,
+    loading: loadingTransactions,
+    fetchAll: fetchAllPaginatedTransactions,
+    invalidateData: invalidatePaginatedTransactions,
+  } = usePaginatedTransactions()
+  const {
+    data: transactionsByEmployee,
+    fetchById: fetchTransactionsByEmployee,
+    invalidateData: invalidateTransactionsByEmployee,
+  } = useTransactionsByEmployee()
   const [isFiltered, setIsFiltered] = useState(false)
 
   // Combine paginated and transactions filtered by employee
@@ -47,57 +55,55 @@ export function App() {
   }, [loadingEmployees, employees, loadAllTransactions])
 
   return (
- 
+
     <Fragment>
-  <main className="MainContainer">
-    <Instructions />
+      <main className="MainContainer">
+        <Instructions />
 
-    <hr className="RampBreak--l" />
+        <hr className="RampBreak--l" />
 
-    {/* InputSelect component to filter transactions by employee */}
-    <InputSelect<Employee>
-      isLoading={loadingEmployees} // Show loading state for employees only
-      defaultValue={EMPTY_EMPLOYEE} // Default value for the dropdown
-      items={employees === null ? [] : [EMPTY_EMPLOYEE, ...employees]} // Items to display in the dropdown, including "All Employees"
-      label="Filter by employee" // Label for the dropdown
-      loadingLabel="Loading employees" // Loading label while fetching employees
-      parseItem={(item) => ({
-        value: item.id,
-        label: item === EMPTY_EMPLOYEE ? "All Employees" : `${item.firstName} ${item.lastName}`, // Parse items to show the correct label
-      })}
-      onChange={async (newValue) => {
-        if (newValue === null || newValue === EMPTY_EMPLOYEE) {
-          // If "All Employees" is selected or the value is null, load all transactions
-          await loadAllTransactions();
-        } else {
-          // If a specific employee is selected, load transactions for that employee
-          await loadTransactionsByEmployee(newValue.id);
-        }
-      }}
-    />
-
-    <div className="RampBreak--l" />
-
-    <div className="RampGrid">
-      {/* Transactions component to display the list of transactions */}
-      <Transactions transactions={transactions} />
-
-      {/* "View More" button to load more transactions */}
-      {transactions !== null && !isFiltered && paginatedTransactions?.nextPage !== null && (
-        <button
-          className="RampButton"
-          disabled={loadingTransactions} // Disable the button while loading
-          onClick={async () => {
-            await fetchAllPaginatedTransactions(); // Fetch more transactions
+        {/* InputSelect component to filter transactions by employee */}
+        <InputSelect<Employee>
+          isLoading={loadingEmployees} // Show loading state for employees only
+          defaultValue={EMPTY_EMPLOYEE} // Default value for the dropdown
+          items={employees === null ? [] : [EMPTY_EMPLOYEE, ...employees]} // Items to display in the dropdown, including "All Employees"
+          label="Filter by employee" // Label for the dropdown
+          loadingLabel="Loading employees" // Loading label while fetching employees
+          parseItem={(item) => ({
+            value: item.id,
+            label: item === EMPTY_EMPLOYEE ? "All Employees" : `${item.firstName} ${item.lastName}`, // Parse items to show the correct label
+          })}
+          onChange={async (newValue) => {
+            if (newValue === null || newValue === EMPTY_EMPLOYEE) {
+              // If "All Employees" is selected or the value is null, load all transactions
+              await loadAllTransactions()
+            } else {
+              // If a specific employee is selected, load transactions for that employee
+              await loadTransactionsByEmployee(newValue.id)
+            }
           }}
-        >
-          View More
-        </button>
-      )}
-    </div>
-  </main>
-</Fragment>
+        />
 
+        <div className="RampBreak--l" />
+
+        <div className="RampGrid">
+          {/* Transactions component to display the list of transactions */}
+          <Transactions transactions={transactions} />
+
+          {/* "View More" button to load more transactions */}
+          {transactions !== null && !isFiltered && paginatedTransactions?.nextPage !== null && (
+            <button
+              className="RampButton"
+              disabled={loadingTransactions} // Disable the button while loading
+              onClick={async () => {
+                await fetchAllPaginatedTransactions() // Fetch more transactions
+              }}
+            >
+              View More
+            </button>
+          )}
+        </div>
+      </main>
+    </Fragment>
   )
 }
-

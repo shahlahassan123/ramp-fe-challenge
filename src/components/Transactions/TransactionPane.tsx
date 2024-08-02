@@ -7,10 +7,9 @@ export const TransactionPane: TransactionPaneComponent = ({
   loading,
   setTransactionApproval: consumerSetTransactionApproval,
 }) => {
-
   const [approved, setApproved] = useState(transaction.approved)
 
-   //Handle approval status change
+  //Handle approval status change
   const handleApprovalChange = async (newValue: boolean) => {
     await consumerSetTransactionApproval({
       transactionId: transaction.id,

@@ -1,0 +1,67 @@
+# Bug 1: Select dropdown doesn't scroll with rest of the page
+This was fixed by using createPortal to render the dropdown directly in the body element, ensuring it stays 
+aligned with the input field as the page is scrolled.
+
+# Bug 2: Approve checkbox not working
+The issue was that the approval state changes weren't being properly managed. This was fixed by ensuring the 
+checkbox's state is updated both locally and sent to the server. The state is managed in a way that it reflects
+both the immediate UI change and persists correctly after interactions with the server.
+Changes Made:
+1. Function:`handleApprovalChange`
+   Location:`TransactionPane` Component (`src/components/Transactions/TransactionPane.tsx`)
+2. Function: `setTransactionApproval`
+   Location: `Transactions` Component (`src/components/Transactions/index.tsx`)
+3. Function: `getApprovalState`
+   Location: `Transactions` Component (`src/components/Transactions/index.tsx`)
+
+# Bug 3: Cannot Select _All Employees_ After Selecting an Employee
+The application crashed because selecting "All Employees" didn't properly reset the state to load all transactions. 
+This was fixed by properly handling the selection of "All Employees" to reset the state and load all transactions 
+without causing a crash.
+Changes Made:
+1. Function: `loadAllTransactions`
+   Location: `App` Component (`src/App.tsx`).  
+2. Function: `loadTransactionsByEmployee`
+   Location: `App` Component (`src/App.tsx`)
+
+   
+# Bug 4: Clicking on View More Button Not Showing Correct Data
+The "View More" button was replacing the current data instead of appending to it. This was fixed by changing the 
+state update logic to append the new transactions to the existing ones, ensuring both initial and newly loaded
+transactions are displayed together.
+Changes Made:.  
+1. Function: `fetchAll`
+   Location: `usePaginatedTransactions` Hook (`src/hooks/usePaginatedTransactions.ts`)
+
+   
+# Bug 5: Employees Filter Not Available During Loading More Data
+The employees filter was showing "Loading employees..." until all transactions were loaded. 
+This was fixed by decoupling the loading states of employees and transactions, ensuring the employees filter stops 
+showing the loading state as soon as the employee data is loaded, regardless of the transaction loading state.
+Changes Made:.  
+1. State Management: `loadingEmployees`
+  Location: `App` Component (`src/App.tsx`)
+   
+# Bug 6: View More Button Not Working as Expected.  
+Part 1: The "View More" button was incorrectly visible when transactions were filtered by employee. 
+This was fixed by ensuring the button only appears for paginated requests.
+Part 2: The "View More" button did not disappear after all data was loaded, causing a crash. This was fixed by
+hiding the button when there are no more pages to load.
+Changes Made:.  
+1. Function: `loadTransactionsByEmployee`
+  Location: `App` Component (`src/App.tsx`)
+2. Condition: `paginatedTransactions?.nextPage !== null`
+  Location: `App` Component (`src/App.tsx`)
+
+   
+# Bug 7: Approving a Transaction Won't Persist the New Value
+The approval state of transactions wasn't persisting because the state changes weren't being properly managed 
+or stored. This was fixed by maintaining a map of updated transaction states and ensuring these changes persist across
+different views and interactions, reflecting the correct state after toggling and navigating.
+Changes Made:.  
+1. Function: `setTransactionApproval`
+   Location: `Transactions` Component (`src/components/Transactions/index.tsx`).  
+2. Function: `getApprovalState`
+   Location: `Transactions` Component (`src/components/Transactions/index.tsx`).  
+3. State Management: `updatedTransactions`
+   Location: `Transactions` Component (`src/components/Transactions/index.tsx`)

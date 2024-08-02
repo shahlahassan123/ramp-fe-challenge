@@ -47,50 +47,7 @@ export function App() {
   }, [loadingEmployees, employees, loadAllTransactions])
 
   return (
-    // <Fragment>
-    //   <main className="MainContainer">
-    //     <Instructions />
-
-    //     <hr className="RampBreak--l" />
-
-    //     <InputSelect<Employee>
-    //       isLoading={loadingEmployees}
-    //       defaultValue={EMPTY_EMPLOYEE}
-    //       items={employees === null ? [] : [EMPTY_EMPLOYEE, ...employees]}
-    //       label="Filter by employee"
-    //       loadingLabel="Loading employees"
-    //       parseItem={(item) => ({
-    //         value: item.id,
-    //         label: item === EMPTY_EMPLOYEE ? "All Employees" : `${item.firstName} ${item.lastName}`,
-    //       })}
-    //       onChange={async (newValue) => {
-    //         if (newValue === null || newValue === EMPTY_EMPLOYEE) {
-    //           await loadAllTransactions()
-    //         } else {
-    //           await loadTransactionsByEmployee(newValue.id)
-    //         }
-    //       }}
-    //     />
-
-    //     <div className="RampBreak--l" />
-
-    //     <div className="RampGrid">
-    //       <Transactions transactions={transactions} />
-
-    //       {transactions !== null && !isFiltered && paginatedTransactions?.nextPage !== null && (
-    //         <button
-    //           className="RampButton"
-    //           disabled={loadingTransactions}
-    //           onClick={async () => {
-    //             await fetchAllPaginatedTransactions()
-    //           }}
-    //         >
-    //           View More
-    //         </button>
-    //       )}
-    //     </div>
-    //   </main>
-    // </Fragment>
+ 
     <Fragment>
   <main className="MainContainer">
     <Instructions />
